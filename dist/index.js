@@ -38,8 +38,6 @@ app.get('/', (req, res) => {
     });
 });
 app.listen(port, () => {
-    (0, db_1.connectToDatabase)().then(() => {
-        return console.log(`Server is listening on ${port}`);
-    });
+    return console.log(`Server is listening on ${port}`);
 });
 //# sourceMappingURL=index.js.map
