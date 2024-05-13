@@ -32,7 +32,14 @@ const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
+let msg = '';
+app.get('/', () => {
+    console.log(msg);
+});
 app.listen(port, () => {
-    (0, db_1.connectToDatabase)().then(() => { return console.log(`Server is listening on ${port}`); });
+    (0, db_1.connectToDatabase)().then(() => {
+        msg = 'server is listening and db is connected';
+        return console.log(`Server is listening on ${port}`);
+    });
 });
 //# sourceMappingURL=index.js.map
