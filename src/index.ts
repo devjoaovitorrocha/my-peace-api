@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
 
 const app = express()
-const port = process.env.PORT || 8080
+const port = process.env.PORT
 
 app.get('/', (_req: Request, res: Response) => {
   return res.send('Express Typescript on Vercel')
