@@ -1,16 +1,11 @@
 import express, { Request, Response } from 'express'
+import { connectToDatabase } from './db'
+import * as dotenv from "dotenv";
 
+dotenv.config()
 const app = express()
 const port = process.env.PORT
 
-app.get('/', (_req: Request, res: Response) => {
-  return res.send('Express Typescript on Vercel')
-})
-
-app.get('/ping', (_req: Request, res: Response) => {
-  return res.send('pong 🏓')
-})
-
 app.listen(port, () => {
-  return console.log(`Server is listening on ${port}`)
+    connectToDatabase().then(() => {return console.log(`Server is listening on ${port}`)})
 })
