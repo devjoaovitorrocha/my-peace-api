@@ -7,11 +7,11 @@ const app = express()
 const port = process.env.PORT
 
 app.get('/', (req: Request, res: Response) => {
-    connectToDatabase().then(() => {
-        res.json({msg: 'Ok'})
-    })
+    res.json({msg: 'Ok'})
 })
 
 app.listen(port, () => {
-    return console.log(`Server is listening on ${port}`)
+    connectToDatabase().then(() => {
+        return console.log(`Server is listening on ${port}`)
+    })
 })

@@ -42,9 +42,9 @@ exports.collections = {};
 function connectToDatabase() {
     return __awaiter(this, void 0, void 0, function* () {
         dotenv.config();
-        const client = new mongoDB.MongoClient("mongodb+srv://admin:mypeace123@mypeace.9ibtalu.mongodb.net/?retryWrites=true&w=majority&appName=MyPeace");
+        const client = new mongoDB.MongoClient(process.env.DB_CONN_STRING);
         yield client.connect();
-        const db = client.db("mypeace-api");
+        const db = client.db(process.env.DB_NAME);
         const psychologistsCollection = db.collection("psychologists");
         const pacientsCollection = db.collection("pacients");
         const reportsCollection = db.collection("reports");
