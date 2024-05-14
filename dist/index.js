@@ -33,11 +33,11 @@ dotenv.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
 app.get('/', (req, res) => {
-    (0, db_1.connectToDatabase)().then(() => {
-        res.json({ msg: 'Ok' });
-    });
+    res.json({ msg: 'Ok' });
 });
 app.listen(port, () => {
-    return console.log(`Server is listening on ${port}`);
+    (0, db_1.connectToDatabase)().then(() => {
+        return console.log(`Server is listening on ${port}`);
+    });
 });
 //# sourceMappingURL=index.js.map
