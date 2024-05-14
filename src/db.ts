@@ -12,11 +12,11 @@ export const collections: { psychologists?: mongoDB.Collection, pacients?: mongo
 export async function connectToDatabase () {
     dotenv.config();
  
-    const client: mongoDB.MongoClient = new mongoDB.MongoClient("mongodb+srv://admin:98pGha2wWuB3wePE@mypeace.9ibtalu.mongodb.net/?retryWrites=true&w=majority&appName=MyPeace");
+    const client: mongoDB.MongoClient = new mongoDB.MongoClient(process.env.DB_CONN_STRING);
             
     await client.connect();
         
-    const db: mongoDB.Db = client.db("mypeace-api");
+    const db: mongoDB.Db = client.db(process.env.DB_NAME);
    
     const psychologistsCollection: mongoDB.Collection = db.collection("psychologists");
     const pacientsCollection: mongoDB.Collection = db.collection("pacients");
