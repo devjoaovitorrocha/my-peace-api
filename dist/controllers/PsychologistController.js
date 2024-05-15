@@ -54,7 +54,7 @@ exports.default = new class PsychologistConttroller {
                 }
             }
             catch (err) {
-                res.json({ msg: 'Sorry, there is something wrong...' });
+                res.status(500).json({ msg: 'Sorry, there is something wrong...' });
                 console.log(err);
             }
         });

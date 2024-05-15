@@ -26,5 +26,5 @@ export async function connectToDatabase () {
     collections.pacients = pacientsCollection;
     collections.reports = reportsCollection;
        
-    console.log(`Successfully connected to database: ${db.databaseName} and collections...`);
+    console.log(`Successfully connected to database and collections...`);
  }

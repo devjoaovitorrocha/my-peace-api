@@ -52,7 +52,7 @@ export default new class PsychologistConttroller{
                 res.status(500).json({ msg: "Server error, contact the support"})
             }  
         }catch(err){
-            res.json({msg: 'Sorry, there is something wrong...'})
+            res.status(500).json({msg: 'Sorry, there is something wrong...'})
             console.log(err)
         }
     }

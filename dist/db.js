@@ -51,7 +51,7 @@ function connectToDatabase() {
         exports.collections.psychologists = psychologistsCollection;
         exports.collections.pacients = pacientsCollection;
         exports.collections.reports = reportsCollection;
-        console.log(`Successfully connected to database: ${db.databaseName} and collections...`);
+        console.log(`Successfully connected to database and collections...`);
     });
 }
 exports.connectToDatabase = connectToDatabase;
