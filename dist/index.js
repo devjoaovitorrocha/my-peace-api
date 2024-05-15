@@ -35,9 +35,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 // app.use(urlencoded())
 const port = process.env.PORT;
-app.get('/ping', (req, res) => {
-    res.json({ msg: 'pong' });
-});
+(0, db_1.connectToDatabase)();
 //==========================PSYCHOLOGIST============================
 app.post('/register/psychologist', PsychologistController_1.default.register);
 app.get('/', (req, res) => {
@@ -46,8 +44,6 @@ app.get('/', (req, res) => {
     });
 });
 app.listen(port, () => {
-    (0, db_1.connectToDatabase)().then(() => {
-        return console.log(`Server is listening on ${port}`);
-    });
+    return console.log(`Server is listening on ${port}`);
 });
 //# sourceMappingURL=index.js.map

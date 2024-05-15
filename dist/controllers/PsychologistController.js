@@ -17,7 +17,6 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 exports.default = new class PsychologistConttroller {
     register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a, _b;
             try {
                 const { name, cpf, registerNumber, email, password, confirmPassword } = req.body;
                 //Validations
@@ -27,12 +26,12 @@ exports.default = new class PsychologistConttroller {
                 if (password != confirmPassword) {
                     return res.status(422).json({ msg: "the passwords doesn't match" });
                 }
-                const psychologistExists = (yield db_1.collections.psychologists.find({ cpf: cpf }).toArray()) || [];
+                const psychologistExists = yield db_1.collections.psychologists.find({ cpf: cpf }).toArray();
                 if (psychologistExists[0]) {
                     return res.status(422).json({ msg: "this psychologist is already registered" });
                 }
-                const emailExistsPsychologists = (yield ((_a = db_1.collections.psychologists) === null || _a === void 0 ? void 0 : _a.find({ email: email }).toArray())) || [];
-                const emailExistsPacients = (yield ((_b = db_1.collections.pacients) === null || _b === void 0 ? void 0 : _b.find({ email: email }).toArray())) || [];
+                const emailExistsPsychologists = yield db_1.collections.psychologists.find({ email: email }).toArray();
+                const emailExistsPacients = yield db_1.collections.pacients.find({ email: email }).toArray();
                 if (emailExistsPsychologists[0] || emailExistsPacients[0]) {
                     return res.status(422).json({ msg: "this email is already in use" });
                 }

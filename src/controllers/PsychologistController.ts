@@ -18,14 +18,14 @@ export default new class PsychologistConttroller{
                 return res.status(422).json({ msg: "the passwords doesn't match"  })
             }
 
-            const psychologistExists = await collections.psychologists.find({ cpf: cpf }).toArray() || []
+            const psychologistExists = await collections.psychologists.find({ cpf: cpf }).toArray()
 
             if(psychologistExists[0]){
                 return res.status(422).json({ msg: "this psychologist is already registered" })
             }
 
-            const emailExistsPsychologists = await collections.psychologists?.find({ email: email }).toArray() || []
-            const emailExistsPacients = await collections.pacients?.find({ email: email }).toArray() || []
+            const emailExistsPsychologists = await collections.psychologists.find({ email: email }).toArray()
+            const emailExistsPacients = await collections.pacients.find({ email: email }).toArray()
 
             if(emailExistsPsychologists[0] || emailExistsPacients[0]){
                 return res.status(422).json({ msg: "this email is already in use" })

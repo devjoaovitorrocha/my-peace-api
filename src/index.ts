@@ -10,9 +10,7 @@ app.use(express.json())
 // app.use(urlencoded())
 const port = process.env.PORT
 
-app.get('/ping', (req: Request, res: Response) => {
-    res.json({msg: 'pong'})
-})
+connectToDatabase()
 
 //==========================PSYCHOLOGIST============================
 
@@ -25,7 +23,5 @@ app.get('/', (req, res) => {
 })
 
 app.listen(port, () => {
-    connectToDatabase().then(() => {
-        return console.log(`Server is listening on ${port}`)
-    })
+    return console.log(`Server is listening on ${port}`)
 })
