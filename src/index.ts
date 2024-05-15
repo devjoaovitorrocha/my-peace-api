@@ -18,6 +18,11 @@ app.get('/ping', (req: Request, res: Response) => {
 
 app.post('/register/psychologist', PsychologistConttroller.register)
 
+app.get('/', (req, res) => {
+    res.status(200).json({
+        msg: 'everything is on...'
+    })
+})
 
 app.listen(port, () => {
     connectToDatabase().then(() => {

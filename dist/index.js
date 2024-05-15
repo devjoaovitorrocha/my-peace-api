@@ -40,6 +40,11 @@ app.get('/ping', (req, res) => {
 });
 //==========================PSYCHOLOGIST============================
 app.post('/register/psychologist', PsychologistController_1.default.register);
+app.get('/', (req, res) => {
+    res.status(200).json({
+        msg: 'everything is on...'
+    });
+});
 app.listen(port, () => {
     (0, db_1.connectToDatabase)().then(() => {
         return console.log(`Server is listening on ${port}`);
