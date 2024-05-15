@@ -29,15 +29,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const db_1 = require("./db");
 const dotenv = __importStar(require("dotenv"));
+const PsychologistController_1 = __importDefault(require("./controllers/PsychologistController"));
 dotenv.config();
 const app = (0, express_1.default)();
+app.use(express_1.default.json());
+// app.use(urlencoded())
 const port = process.env.PORT;
-app.get('/', (req, res) => {
-    (0, db_1.connectToDatabase)().then(() => {
-        res.json({ msg: 'Ok' });
-    });
+app.get('/ping', (req, res) => {
+    res.json({ msg: 'pong' });
 });
+//==========================PSYCHOLOGIST============================
+app.post('/register/psychologist', PsychologistController_1.default.register);
 app.listen(port, () => {
-    return console.log(`Server is listening on ${port}`);
+    (0, db_1.connectToDatabase)().then(() => {
+        return console.log(`Server is listening on ${port}`);
+    });
 });
 //# sourceMappingURL=index.js.map

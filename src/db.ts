@@ -24,7 +24,7 @@ export async function connectToDatabase () {
  
     collections.psychologists = psychologistsCollection;
     collections.pacients = pacientsCollection;
-    collections.psychologists = reportsCollection;
+    collections.reports = reportsCollection;
        
     console.log(`Successfully connected to database: ${db.databaseName} and collections...`);
  }

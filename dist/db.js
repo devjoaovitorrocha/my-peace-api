@@ -50,7 +50,7 @@ function connectToDatabase() {
         const reportsCollection = db.collection("reports");
         exports.collections.psychologists = psychologistsCollection;
         exports.collections.pacients = pacientsCollection;
-        exports.collections.psychologists = reportsCollection;
+        exports.collections.reports = reportsCollection;
         console.log(`Successfully connected to database: ${db.databaseName} and collections...`);
     });
 }
