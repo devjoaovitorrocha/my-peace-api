@@ -17,7 +17,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 exports.default = new class PsychologistConttroller {
     register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a, _b, _c, _d;
+            var _a, _b;
             try {
                 const { name, cpf, registerNumber, email, password, confirmPassword } = req.body;
                 //Validations
@@ -27,19 +27,19 @@ exports.default = new class PsychologistConttroller {
                 if (password != confirmPassword) {
                     return res.status(422).json({ msg: "the passwords doesn't match" });
                 }
-                const psychologistExists = yield ((_a = db_1.collections.psychologists) === null || _a === void 0 ? void 0 : _a.find({ cpf: cpf }).toArray());
+                const psychologistExists = (yield db_1.collections.psychologists.find({ cpf: cpf }).toArray()) || [];
                 if (psychologistExists[0]) {
                     return res.status(422).json({ msg: "this psychologist is already registered" });
                 }
-                const emailExistsPsychologists = yield ((_b = db_1.collections.psychologists) === null || _b === void 0 ? void 0 : _b.find({ email: email }).toArray());
-                const emailExistsPacients = yield ((_c = db_1.collections.pacients) === null || _c === void 0 ? void 0 : _c.find({ email: email }).toArray());
+                const emailExistsPsychologists = (yield ((_a = db_1.collections.psychologists) === null || _a === void 0 ? void 0 : _a.find({ email: email }).toArray())) || [];
+                const emailExistsPacients = (yield ((_b = db_1.collections.pacients) === null || _b === void 0 ? void 0 : _b.find({ email: email }).toArray())) || [];
                 if (emailExistsPsychologists[0] || emailExistsPacients[0]) {
                     return res.status(422).json({ msg: "this email is already in use" });
                 }
                 const salt = yield bcrypt_1.default.genSalt(12);
                 const passwordHash = yield bcrypt_1.default.hash(password, salt);
                 try {
-                    (_d = db_1.collections.psychologists) === null || _d === void 0 ? void 0 : _d.insertOne({
+                    db_1.collections.psychologists.insertOne({
                         name,
                         cpf,
                         registerNumber,
