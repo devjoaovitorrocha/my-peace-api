@@ -73,7 +73,7 @@ exports.default = new class AuthController {
             }
         });
     }
-    checkToken(req, res) {
+    checkToken(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
             try {
@@ -106,7 +106,7 @@ exports.default = new class AuthController {
                         decoded = jsonwebtoken_1.default.verify(token, auth.secret);
                     }
                     if (user._id == decoded._id) {
-                        return res.status(200).send(decoded);
+                        next();
                     }
                     else {
                         return res.status(401).json({ msg: 'user unauthorized' });

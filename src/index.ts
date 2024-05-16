@@ -4,6 +4,7 @@ import * as dotenv from "dotenv";
 import PsychologistConttroller from './controllers/PsychologistController';
 import PacientController from './controllers/PacientController';
 import AuthController from './controllers/AuthController';
+import ReportController from './controllers/ReportController';
 
 dotenv.config()
 const app = express()
@@ -15,10 +16,14 @@ connectToDatabase().then(() => {
 
     app.post('/register/psychologist', PsychologistConttroller.register)
 
-
     //============================PACIENT===============================
 
     app.post('/register/pacient', PacientController.register)
+
+    //============================REPORT================================
+
+    app.post('/register/report/:id', AuthController.checkToken , ReportController.register)
+    app.post('/update/report/:id/:idReport', AuthController.checkToken, ReportController.update)
 
     //=============================LOGIN================================
 
@@ -39,6 +44,7 @@ connectToDatabase().then(() => {
     app.listen(port, () => {
         return console.log(`Server is listening on ${port}`)
     })
+
 }).catch((e: Error) => {
     console.log('Database connection failed...')
 })

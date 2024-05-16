@@ -76,7 +76,7 @@ export default new class AuthController{
         }
     }
 
-    async checkToken(req: Request, res: Response){
+    async checkToken(req: Request, res: Response, next: NextFunction){
         try{
             const id = req.params.id
             const objectId = new ObjectId(id)
@@ -112,7 +112,7 @@ export default new class AuthController{
 
                 
                 if(user._id == decoded._id){
-                    return res.status(200).send(decoded);
+                    next()
                 }else{
                     return res.status(401).json({msg: 'user unauthorized'});
                 }
@@ -126,6 +126,7 @@ export default new class AuthController{
             res.status(401).json({
                 msg: "something is wrong..."
             })
+
         }
             
     }

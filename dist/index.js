@@ -32,6 +32,7 @@ const dotenv = __importStar(require("dotenv"));
 const PsychologistController_1 = __importDefault(require("./controllers/PsychologistController"));
 const PacientController_1 = __importDefault(require("./controllers/PacientController"));
 const AuthController_1 = __importDefault(require("./controllers/AuthController"));
+const ReportController_1 = __importDefault(require("./controllers/ReportController"));
 dotenv.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
@@ -41,6 +42,9 @@ const port = process.env.PORT;
     app.post('/register/psychologist', PsychologistController_1.default.register);
     //============================PACIENT===============================
     app.post('/register/pacient', PacientController_1.default.register);
+    //============================REPORT================================
+    app.post('/register/report/:id', AuthController_1.default.checkToken, ReportController_1.default.register);
+    app.post('/update/report/:id/:idReport', AuthController_1.default.checkToken, ReportController_1.default.update);
     //=============================LOGIN================================
     app.post('/auth/login', AuthController_1.default.login);
     //===========================AUTH================================
