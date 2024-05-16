@@ -8,7 +8,6 @@ import AuthController from './controllers/AuthController';
 dotenv.config()
 const app = express()
 app.use(express.json())
-// app.use(urlencoded())
 const port = process.env.PORT
 
 //==========================PSYCHOLOGIST============================
@@ -31,13 +30,12 @@ app.get('/auth/:id', AuthController.checkToken)
 //==============================SERVER=============================
 
 app.get('/', (req: Request, res: Response) => {
-    connectToDatabase().then(() => {
-        res.status(200).json({
-            msg: 'everything is on...'
-        })
+    res.status(200).json({
+        msg: 'everything is on...'
     })
 })
 
 app.listen(port, () => {
+    connectToDatabase()
     return console.log(`Server is listening on ${port}`)
 })

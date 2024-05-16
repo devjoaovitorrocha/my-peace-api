@@ -35,7 +35,6 @@ const AuthController_1 = __importDefault(require("./controllers/AuthController")
 dotenv.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-// app.use(urlencoded())
 const port = process.env.PORT;
 //==========================PSYCHOLOGIST============================
 app.post('/register/psychologist', PsychologistController_1.default.register);
@@ -47,13 +46,12 @@ app.post('/auth/login', AuthController_1.default.login);
 app.get('/auth/:id', AuthController_1.default.checkToken);
 //==============================SERVER=============================
 app.get('/', (req, res) => {
-    (0, db_1.connectToDatabase)().then(() => {
-        res.status(200).json({
-            msg: 'everything is on...'
-        });
+    res.status(200).json({
+        msg: 'everything is on...'
     });
 });
 app.listen(port, () => {
+    (0, db_1.connectToDatabase)();
     return console.log(`Server is listening on ${port}`);
 });
 //# sourceMappingURL=index.js.map
