@@ -36,6 +36,7 @@ dotenv.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 const port = process.env.PORT;
+app.use(db_1.connectToDatabase);
 //==========================PSYCHOLOGIST============================
 app.post('/register/psychologist', PsychologistController_1.default.register);
 //============================PACIENT===============================
@@ -51,7 +52,6 @@ app.get('/', (req, res) => {
     });
 });
 app.listen(port, () => {
-    (0, db_1.connectToDatabase)();
     return console.log(`Server is listening on ${port}`);
 });
 //# sourceMappingURL=index.js.map

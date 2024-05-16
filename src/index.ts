@@ -9,6 +9,7 @@ dotenv.config()
 const app = express()
 app.use(express.json())
 const port = process.env.PORT
+app.use(connectToDatabase)
 
 //==========================PSYCHOLOGIST============================
 
@@ -36,6 +37,6 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.listen(port, () => {
-    connectToDatabase()
+    
     return console.log(`Server is listening on ${port}`)
 })
