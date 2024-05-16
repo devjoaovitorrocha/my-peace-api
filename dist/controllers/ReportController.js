@@ -34,9 +34,10 @@ exports.default = new class ReportController {
                     feeling,
                     description,
                     idPacient
-                });
-                return res.status(200).json({
-                    msg: 'report registered'
+                }).then(() => {
+                    return res.status(200).json({
+                        msg: 'report registered'
+                    });
                 });
             }
             catch (e) {
@@ -66,8 +67,9 @@ exports.default = new class ReportController {
                         feeling,
                         description
                     }
+                }).then(() => {
+                    return res.status(200).json({ msg: "report updated" });
                 });
-                return res.status(200).json({ msg: "report updated" });
             }
             catch (e) {
                 return res.status(500).json({
