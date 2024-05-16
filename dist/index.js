@@ -36,22 +36,25 @@ dotenv.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 const port = process.env.PORT;
-app.use(db_1.connectToDatabase);
-//==========================PSYCHOLOGIST============================
-app.post('/register/psychologist', PsychologistController_1.default.register);
-//============================PACIENT===============================
-app.post('/register/pacient', PacientController_1.default.register);
-//=============================LOGIN================================
-app.post('/auth/login', AuthController_1.default.login);
-//===========================AUTH================================
-app.get('/auth/:id', AuthController_1.default.checkToken);
-//==============================SERVER=============================
-app.get('/', (req, res) => {
-    res.status(200).json({
-        msg: 'everything is on...'
+(0, db_1.connectToDatabase)().then(() => {
+    //==========================PSYCHOLOGIST============================
+    app.post('/register/psychologist', PsychologistController_1.default.register);
+    //============================PACIENT===============================
+    app.post('/register/pacient', PacientController_1.default.register);
+    //=============================LOGIN================================
+    app.post('/auth/login', AuthController_1.default.login);
+    //===========================AUTH================================
+    app.get('/auth/:id', AuthController_1.default.checkToken);
+    //==============================SERVER=============================
+    app.get('/', (req, res) => {
+        res.status(200).json({
+            msg: 'everything is on...'
+        });
     });
-});
-app.listen(port, () => {
-    return console.log(`Server is listening on ${port}`);
+    app.listen(port, () => {
+        return console.log(`Server is listening on ${port}`);
+    });
+}).catch((e) => {
+    console.log('Database connection failed...');
 });
 //# sourceMappingURL=index.js.map

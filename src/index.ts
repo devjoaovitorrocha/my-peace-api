@@ -9,34 +9,36 @@ dotenv.config()
 const app = express()
 app.use(express.json())
 const port = process.env.PORT
-app.use(connectToDatabase)
 
-//==========================PSYCHOLOGIST============================
+connectToDatabase().then(() => {
+    //==========================PSYCHOLOGIST============================
 
-app.post('/register/psychologist', PsychologistConttroller.register)
+    app.post('/register/psychologist', PsychologistConttroller.register)
 
 
-//============================PACIENT===============================
+    //============================PACIENT===============================
 
-app.post('/register/pacient', PacientController.register)
+    app.post('/register/pacient', PacientController.register)
 
-//=============================LOGIN================================
+    //=============================LOGIN================================
 
-app.post('/auth/login', AuthController.login)
+    app.post('/auth/login', AuthController.login)
 
-//===========================AUTH================================
+    //===========================AUTH================================
 
-app.get('/auth/:id', AuthController.checkToken)
+    app.get('/auth/:id', AuthController.checkToken)
 
-//==============================SERVER=============================
+    //==============================SERVER=============================
 
-app.get('/', (req: Request, res: Response) => {
-    res.status(200).json({
-        msg: 'everything is on...'
+    app.get('/', (req: Request, res: Response) => {
+        res.status(200).json({
+            msg: 'everything is on...'
+        })
     })
-})
 
-app.listen(port, () => {
-    
-    return console.log(`Server is listening on ${port}`)
+    app.listen(port, () => {
+        return console.log(`Server is listening on ${port}`)
+    })
+}).catch((e: Error) => {
+    console.log('Database connection failed...')
 })
