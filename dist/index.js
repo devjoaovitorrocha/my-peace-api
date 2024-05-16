@@ -30,6 +30,8 @@ const express_1 = __importDefault(require("express"));
 const db_1 = require("./db");
 const dotenv = __importStar(require("dotenv"));
 const PsychologistController_1 = __importDefault(require("./controllers/PsychologistController"));
+const PacientController_1 = __importDefault(require("./controllers/PacientController"));
+const AuthController_1 = __importDefault(require("./controllers/AuthController"));
 dotenv.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
@@ -38,6 +40,13 @@ const port = process.env.PORT;
 (0, db_1.connectToDatabase)();
 //==========================PSYCHOLOGIST============================
 app.post('/register/psychologist', PsychologistController_1.default.register);
+//============================PACIENT===============================
+app.post('/register/pacient', PacientController_1.default.register);
+//=============================LOGIN================================
+app.post('/auth/login', AuthController_1.default.login);
+//===========================AUTH================================
+app.get('/auth/:id', AuthController_1.default.checkToken);
+//==============================SERVER=============================
 app.get('/', (req, res) => {
     res.status(200).json({
         msg: 'everything is on...'
