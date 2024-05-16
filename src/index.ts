@@ -11,8 +11,6 @@ app.use(express.json())
 // app.use(urlencoded())
 const port = process.env.PORT
 
-connectToDatabase()
-
 //==========================PSYCHOLOGIST============================
 
 app.post('/register/psychologist', PsychologistConttroller.register)
@@ -33,8 +31,10 @@ app.get('/auth/:id', AuthController.checkToken)
 //==============================SERVER=============================
 
 app.get('/', (req: Request, res: Response) => {
-    res.status(200).json({
-        msg: 'everything is on...'
+    connectToDatabase().then(() => {
+        res.status(200).json({
+            msg: 'everything is on...'
+        })
     })
 })
 

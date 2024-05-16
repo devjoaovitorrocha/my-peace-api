@@ -37,7 +37,6 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 // app.use(urlencoded())
 const port = process.env.PORT;
-(0, db_1.connectToDatabase)();
 //==========================PSYCHOLOGIST============================
 app.post('/register/psychologist', PsychologistController_1.default.register);
 //============================PACIENT===============================
@@ -48,8 +47,10 @@ app.post('/auth/login', AuthController_1.default.login);
 app.get('/auth/:id', AuthController_1.default.checkToken);
 //==============================SERVER=============================
 app.get('/', (req, res) => {
-    res.status(200).json({
-        msg: 'everything is on...'
+    (0, db_1.connectToDatabase)().then(() => {
+        res.status(200).json({
+            msg: 'everything is on...'
+        });
     });
 });
 app.listen(port, () => {
