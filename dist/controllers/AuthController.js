@@ -77,7 +77,7 @@ exports.default = new class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
             try {
-                const id = req.params.id;
+                const id = req.params.idUser;
                 const objectId = new mongodb_1.ObjectId(id);
                 let user;
                 const psychologistInfo = yield db_1.collections.psychologists.find({ _id: objectId }).toArray();

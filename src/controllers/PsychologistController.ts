@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { collections } from "../db";
 import bcrypt from 'bcrypt'
+import { ObjectId } from "mongodb";
 
 export default new class PsychologistConttroller{
 
@@ -51,6 +52,20 @@ export default new class PsychologistConttroller{
 
                 res.status(500).json({ msg: "Server error, contact the support"})
             }  
+        }catch(err){
+            res.status(500).json({msg: 'Sorry, there is something wrong...'})
+            console.log(err)
+        }
+    }
+
+    async getInfo(req:Request, res:Response){
+        try{
+            const idPschologist = req.params.idUser
+            const objectId = new ObjectId(idPschologist)
+
+            collections.psychologists.findOne({_id: objectId}, {projection: {password: 0, _id: 0}}).then((psychologistInfo) => {
+                res.status(200).json(psychologistInfo)
+            })
         }catch(err){
             res.status(500).json({msg: 'Sorry, there is something wrong...'})
             console.log(err)

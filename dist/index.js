@@ -40,11 +40,14 @@ const port = process.env.PORT;
 (0, db_1.connectToDatabase)().then(() => {
     //==========================PSYCHOLOGIST============================
     app.post('/register/psychologist', PsychologistController_1.default.register);
+    app.get('/get/psychologistInfo/:idUser', AuthController_1.default.checkToken, PsychologistController_1.default.getInfo);
     //============================PACIENT===============================
-    app.post('/register/pacient', PacientController_1.default.register);
+    app.post('/register/pacient/:idUser', AuthController_1.default.checkToken, PacientController_1.default.register);
+    app.get('/get/pacientInfo/:idUser', AuthController_1.default.checkToken, PacientController_1.default.getInfo);
     //============================REPORT================================
-    app.post('/register/report/:id', AuthController_1.default.checkToken, ReportController_1.default.register);
-    app.post('/update/report/:id/:idReport', AuthController_1.default.checkToken, ReportController_1.default.update);
+    app.post('/register/report/:idUser', AuthController_1.default.checkToken, ReportController_1.default.register);
+    app.post('/update/report/:idUser/:idReport', AuthController_1.default.checkToken, ReportController_1.default.update);
+    app.post('/delete/report/:idUser/:idReport', AuthController_1.default.checkToken, ReportController_1.default.delete);
     //=============================LOGIN================================
     app.post('/auth/login', AuthController_1.default.login);
     //===========================AUTH================================

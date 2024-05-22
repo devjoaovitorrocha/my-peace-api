@@ -15,15 +15,18 @@ connectToDatabase().then(() => {
     //==========================PSYCHOLOGIST============================
 
     app.post('/register/psychologist', PsychologistConttroller.register)
+    app.get('/get/psychologistInfo/:idUser', AuthController.checkToken , PsychologistConttroller.getInfo)
 
     //============================PACIENT===============================
 
-    app.post('/register/pacient', PacientController.register)
+    app.post('/register/pacient/:idUser', AuthController.checkToken ,PacientController.register)
+    app.get('/get/pacientInfo/:idUser', AuthController.checkToken , PacientController.getInfo)
 
     //============================REPORT================================
 
-    app.post('/register/report/:id', AuthController.checkToken , ReportController.register)
-    app.post('/update/report/:id/:idReport', AuthController.checkToken, ReportController.update)
+    app.post('/register/report/:idUser', AuthController.checkToken , ReportController.register)
+    app.post('/update/report/:idUser/:idReport', AuthController.checkToken , ReportController.update)
+    app.post('/delete/report/:idUser/:idReport', AuthController.checkToken , ReportController.delete)
 
     //=============================LOGIN================================
 

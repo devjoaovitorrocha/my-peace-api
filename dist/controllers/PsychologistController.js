@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../db");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const mongodb_1 = require("mongodb");
 exports.default = new class PsychologistConttroller {
     register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -52,6 +53,21 @@ exports.default = new class PsychologistConttroller {
                     console.log(err);
                     res.status(500).json({ msg: "Server error, contact the support" });
                 }
+            }
+            catch (err) {
+                res.status(500).json({ msg: 'Sorry, there is something wrong...' });
+                console.log(err);
+            }
+        });
+    }
+    getInfo(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const idPschologist = req.params.idUser;
+                const objectId = new mongodb_1.ObjectId(idPschologist);
+                db_1.collections.psychologists.findOne({ _id: objectId }, { projection: { password: 0, _id: 0 } }).then((psychologistInfo) => {
+                    res.status(200).json(psychologistInfo);
+                });
             }
             catch (err) {
                 res.status(500).json({ msg: 'Sorry, there is something wrong...' });

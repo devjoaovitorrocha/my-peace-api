@@ -78,7 +78,7 @@ export default new class AuthController{
 
     async checkToken(req: Request, res: Response, next: NextFunction){
         try{
-            const id = req.params.id
+            const id = req.params.idUser
             const objectId = new ObjectId(id)
             let user
 

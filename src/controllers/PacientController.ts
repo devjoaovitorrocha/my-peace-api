@@ -60,4 +60,18 @@ export default new class PacientController{
             console.log(err)
         }
     }
+
+    async getInfo(req:Request, res:Response){
+        try{
+            const idPacient = req.params.idUser
+            const objectId = new ObjectId(idPacient)
+
+            collections.pacients.findOne({_id: objectId}, {projection: {password: 0, _id: 0, idPsychologist: 0}}).then((pacientInfo) => {
+                return res.status(200).send(pacientInfo)
+            })
+        }catch(err){
+            res.status(500).json({msg: 'Sorry, there is something wrong...'})
+            console.log(err)
+        }
+    }
 }

@@ -6,10 +6,9 @@ import { ObjectId } from "mongodb"
 export default new class ReportController{
 
     async register(req: Request, res: Response){
-
         try{
             const { feeling, description } = req.body
-            const idPacient = req.params.id
+            const idPacient = req.params.idUser
             const objectId = new ObjectId(idPacient)
 
             if(!feeling || !description || !idPacient){
@@ -50,7 +49,7 @@ export default new class ReportController{
     async update(req: Request, res: Response){
         try{
             const { feeling, description } = req.body
-            const idPacient = req.params.id
+            const idPacient = req.params.idUser
             const idReport = req.params.idReport
 
             const objectIdReport = new ObjectId(idReport)
@@ -82,6 +81,30 @@ export default new class ReportController{
     }
 
     async delete(req: Request, res: Response){
+        try{
+            const idPacient = req.params.idUser
+            const idReport = req.params.idReport
 
+            const objectIdReport = new ObjectId(idReport)
+
+            if(!idPacient || !idReport){
+                return res.status(422).json({ msg: "something is null..."})
+            }
+
+            const reportExists = await collections.reports.find({ _id: objectIdReport }).toArray()
+
+            if(!reportExists[0]){
+                return res.status(422).json({ msg: "this report does not exist" })
+            }
+
+            collections.reports.deleteOne({_id: objectIdReport}).then(() => {
+                return res.status(200).json({ msg: "report deleted" })
+            })
+
+        }catch(e){
+            return res.status(500).json({
+                msg: 'something is wrong...'
+            })
+        }
     }
 }

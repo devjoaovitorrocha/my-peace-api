@@ -16,7 +16,7 @@ exports.default = new class ReportController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { feeling, description } = req.body;
-                const idPacient = req.params.id;
+                const idPacient = req.params.idUser;
                 const objectId = new mongodb_1.ObjectId(idPacient);
                 if (!feeling || !description || !idPacient) {
                     return res.status(422).json({ msg: "something is null..." });
@@ -52,7 +52,7 @@ exports.default = new class ReportController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { feeling, description } = req.body;
-                const idPacient = req.params.id;
+                const idPacient = req.params.idUser;
                 const idReport = req.params.idReport;
                 const objectIdReport = new mongodb_1.ObjectId(idReport);
                 if (!feeling || !description || !idPacient || !idReport) {
@@ -80,6 +80,26 @@ exports.default = new class ReportController {
     }
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const idPacient = req.params.idUser;
+                const idReport = req.params.idReport;
+                const objectIdReport = new mongodb_1.ObjectId(idReport);
+                if (!idPacient || !idReport) {
+                    return res.status(422).json({ msg: "something is null..." });
+                }
+                const reportExists = yield db_1.collections.reports.find({ _id: objectIdReport }).toArray();
+                if (!reportExists[0]) {
+                    return res.status(422).json({ msg: "this report does not exist" });
+                }
+                db_1.collections.reports.deleteOne({ _id: objectIdReport }).then(() => {
+                    return res.status(200).json({ msg: "report deleted" });
+                });
+            }
+            catch (e) {
+                return res.status(500).json({
+                    msg: 'something is wrong...'
+                });
+            }
         });
     }
 };
