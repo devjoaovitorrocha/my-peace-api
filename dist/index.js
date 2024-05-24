@@ -38,6 +38,11 @@ dotenv.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 const port = process.env.PORT;
+const options = {
+    methods: "GET,OPTIONS,POST,PUT,DELETE",
+    origin: "*",
+};
+app.use((0, cors_1.default)(options));
 (0, db_1.connectToDatabase)().then(() => {
     //==========================PSYCHOLOGIST============================
     app.post('/register/psychologist', PsychologistController_1.default.register);
@@ -62,11 +67,6 @@ const port = process.env.PORT;
     app.listen(port, () => {
         return console.log(`Server is listening on ${port}`);
     });
-    const options = {
-        methods: "GET,OPTIONS,POST,PUT,DELETE",
-        origin: "*",
-    };
-    app.use((0, cors_1.default)(options));
 }).catch((e) => {
     console.log('Database connection failed...');
 });

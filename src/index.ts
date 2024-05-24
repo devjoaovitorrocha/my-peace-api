@@ -12,6 +12,13 @@ const app = express()
 app.use(express.json())
 const port = process.env.PORT
 
+const options: cors.CorsOptions = {
+    methods: "GET,OPTIONS,POST,PUT,DELETE",
+    origin: "*",
+}
+
+app.use(cors(options))
+
 connectToDatabase().then(() => {
     //==========================PSYCHOLOGIST============================
 
@@ -48,13 +55,6 @@ connectToDatabase().then(() => {
     app.listen(port, () => {
         return console.log(`Server is listening on ${port}`)
     })
-
-    const options: cors.CorsOptions = {
-        methods: "GET,OPTIONS,POST,PUT,DELETE",
-        origin: "*",
-    }
-
-    app.use(cors(options))
 
 }).catch((e: Error) => {
     console.log('Database connection failed...')
