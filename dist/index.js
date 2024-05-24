@@ -40,7 +40,7 @@ app.use(express_1.default.json());
 const port = process.env.PORT;
 const options = {
     methods: "GET,OPTIONS,POST,PUT,DELETE",
-    origin: "http://localhost:573",
+    origin: "http://localhost:5173",
     credentials: true,
     allowedHeaders: "Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
 };
