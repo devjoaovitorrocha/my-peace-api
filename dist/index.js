@@ -33,6 +33,7 @@ const PsychologistController_1 = __importDefault(require("./controllers/Psycholo
 const PacientController_1 = __importDefault(require("./controllers/PacientController"));
 const AuthController_1 = __importDefault(require("./controllers/AuthController"));
 const ReportController_1 = __importDefault(require("./controllers/ReportController"));
+const cors_1 = __importDefault(require("cors"));
 dotenv.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
@@ -61,6 +62,11 @@ const port = process.env.PORT;
     app.listen(port, () => {
         return console.log(`Server is listening on ${port}`);
     });
+    const options = {
+        methods: "GET,OPTIONS,POST,PUT,DELETE",
+        origin: "*",
+    };
+    app.use((0, cors_1.default)(options));
 }).catch((e) => {
     console.log('Database connection failed...');
 });

@@ -5,6 +5,7 @@ import PsychologistConttroller from './controllers/PsychologistController';
 import PacientController from './controllers/PacientController';
 import AuthController from './controllers/AuthController';
 import ReportController from './controllers/ReportController';
+import cors from 'cors'
 
 dotenv.config()
 const app = express()
@@ -47,6 +48,13 @@ connectToDatabase().then(() => {
     app.listen(port, () => {
         return console.log(`Server is listening on ${port}`)
     })
+
+    const options: cors.CorsOptions = {
+        methods: "GET,OPTIONS,POST,PUT,DELETE",
+        origin: "*",
+    }
+
+    app.use(cors(options))
 
 }).catch((e: Error) => {
     console.log('Database connection failed...')
