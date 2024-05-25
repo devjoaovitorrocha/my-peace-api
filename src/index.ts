@@ -44,10 +44,6 @@ connectToDatabase().then(() => {
 
     app.post('/auth/login', AuthController.login)
 
-    //===========================AUTH================================
-
-    app.get('/auth/:id', AuthController.checkToken)
-
     //==============================SERVER=============================
 
     app.get('/', (req: Request, res: Response) => {

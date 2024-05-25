@@ -60,8 +60,6 @@ app.use((0, cors_1.default)(options));
     app.get('/getAll/reports/:idUser', AuthController_1.default.checkToken, ReportController_1.default.allReports);
     //=============================LOGIN================================
     app.post('/auth/login', AuthController_1.default.login);
-    //===========================AUTH================================
-    app.get('/auth/:id', AuthController_1.default.checkToken);
     //==============================SERVER=============================
     app.get('/', (req, res) => {
         res.status(200).json({
