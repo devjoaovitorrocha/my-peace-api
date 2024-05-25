@@ -56,6 +56,7 @@ app.use((0, cors_1.default)(options));
     app.post('/register/report/:idUser', AuthController_1.default.checkToken, ReportController_1.default.register);
     app.post('/update/report/:idUser/:idReport', AuthController_1.default.checkToken, ReportController_1.default.update);
     app.post('/delete/report/:idUser/:idReport', AuthController_1.default.checkToken, ReportController_1.default.delete);
+    app.get('/getAll/reports/:idUser', AuthController_1.default.checkToken, ReportController_1.default.allReports);
     //=============================LOGIN================================
     app.post('/auth/login', AuthController_1.default.login);
     //===========================AUTH================================

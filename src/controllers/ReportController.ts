@@ -107,4 +107,23 @@ export default new class ReportController{
             })
         }
     }
+
+    async allReports(req: Request, res: Response){
+        try{
+            const idPacient = req.params.idUser
+
+            if(!idPacient){
+                return res.status(422).json({ msg: "something is null..."})
+            }
+
+            collections.reports.find({idPacient}, {projection: {idPacient: 0}}).toArray().then((reports) => {
+                return res.status(200).json({ reports })
+            })
+    
+        }catch(e){
+            return res.status(500).json({
+                msg: 'something is wrong...'
+            })
+        }
+    }
 }
