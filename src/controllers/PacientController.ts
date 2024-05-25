@@ -74,4 +74,23 @@ export default new class PacientController{
             console.log(err)
         }
     }
+
+    async allPacients(req: Request, res: Response){
+        try{
+            const idPsychologist = req.params.idUser
+
+            if(!idPsychologist){
+                return res.status(422).json({ msg: "something is null..."})
+            }
+
+            collections.pacients.find({idPsychologist}, {projection: {password: 0, idPsychologist: 0}}).toArray().then((allPacients) => {
+                return res.status(200).json({ allPacients })
+            })
+    
+        }catch(e){
+            return res.status(500).json({
+                msg: 'something is wrong...'
+            })
+        }
+    }
 }

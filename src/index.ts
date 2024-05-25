@@ -31,6 +31,7 @@ connectToDatabase().then(() => {
 
     app.post('/register/pacient/:idUser', AuthController.checkToken ,PacientController.register)
     app.get('/get/pacientInfo/:idUser', AuthController.checkToken , PacientController.getInfo)
+    app.get('/getAll/pacients/:idUser', AuthController.checkToken, PacientController.allPacients)
 
     //============================REPORT================================
 
