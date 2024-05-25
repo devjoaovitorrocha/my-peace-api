@@ -14,7 +14,7 @@ const port = process.env.PORT
 
 const options: cors.CorsOptions = {
     methods: "GET,OPTIONS,POST,PUT,DELETE",
-    origin: "http://localhost:3000",
+    origin: "*",
     credentials: true,
     allowedHeaders: "Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
 }
