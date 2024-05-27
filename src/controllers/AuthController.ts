@@ -44,7 +44,7 @@ export default new class AuthController{
                         res.status(200).json({token: token, id: psychologistInfo[0]._id, type: 'psychologist'})
 
                     } else {
-                        res.status(401).json({ message: "Invalid Credentials" });
+                        res.status(401).json({ msg: "Invalid Credentials" });
                     }
                 }else{
                     const match = await bcrypt.compare(password, pacientInfo[0].password);
@@ -65,7 +65,7 @@ export default new class AuthController{
                         res.status(200).json({token: token, id: pacientInfo[0]._id, type: 'pacient'})
 
                     } else {
-                        res.json({ message: "Invalid Credentials" });
+                        res.json({ msg: "Invalid Credentials" });
                     }
                 }
         } catch(e) {
@@ -99,7 +99,7 @@ export default new class AuthController{
                 const token = req.header('Authorization')?.replace('Bearer ', '');
 
                 if (!token){
-                    return res.status(401).json({ message: 'No token provided.' });
+                    return res.status(401).json({ msg: 'No token provided.' });
                 } 
 
                 let decoded
