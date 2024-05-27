@@ -45,7 +45,7 @@ exports.default = new class AuthController {
                         res.status(200).json({ token: token, id: psychologistInfo[0]._id, type: 'psychologist' });
                     }
                     else {
-                        res.json({ message: "Invalid Credentials" });
+                        res.status(401).json({ message: "Invalid Credentials" });
                     }
                 }
                 else {
