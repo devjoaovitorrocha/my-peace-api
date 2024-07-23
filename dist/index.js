@@ -53,6 +53,8 @@ app.use((0, cors_1.default)(options));
     app.post('/register/pacient/:idUser', AuthController_1.default.checkToken, PacientController_1.default.register);
     app.get('/get/pacientInfo/:idUser', AuthController_1.default.checkToken, PacientController_1.default.getInfo);
     app.get('/getAll/pacients/:idUser', AuthController_1.default.checkToken, PacientController_1.default.allPacients);
+    app.get('/delete/pacients/:idUser', AuthController_1.default.checkToken, PacientController_1.default.delete);
+    app.get('/edit/pacients/:idUser', AuthController_1.default.checkToken, PacientController_1.default.edit);
     //============================REPORT================================
     app.post('/register/report/:idUser', AuthController_1.default.checkToken, ReportController_1.default.register);
     app.post('/update/report/:idUser/:idReport', AuthController_1.default.checkToken, ReportController_1.default.update);

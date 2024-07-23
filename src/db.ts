@@ -27,4 +27,4 @@ export async function connectToDatabase () {
     collections.reports = reportsCollection;
        
     console.log(`Successfully connected to database and collections...`);
- }
+}

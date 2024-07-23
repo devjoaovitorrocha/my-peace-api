@@ -106,12 +106,19 @@ exports.default = new class ReportController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const idPacient = req.params.idUser;
+                // const date = req.query.date
                 if (!idPacient) {
                     return res.status(422).json({ msg: "something is null..." });
                 }
+                // if(date){
+                //     collections.reports.find({idPacient, date}, {projection: {idPacient: 0}}).toArray().then((reports) => {
+                //         return res.status(200).json({reports})
+                //     })
+                // }else{
                 db_1.collections.reports.find({ idPacient }, { projection: { idPacient: 0 } }).toArray().then((reports) => {
                     return res.status(200).json({ reports });
                 });
+                // }
             }
             catch (e) {
                 return res.status(500).json({
