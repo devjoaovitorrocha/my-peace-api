@@ -97,9 +97,9 @@ export default new class PacientController{
             }
 
             try{
-                collections.pacients.updateMany({_id: objectIdPacient}, {
-                    name,
-                    email
+                collections.pacients.updateOne({_id: objectIdPacient}, {
+                    name: name,
+                    email: email
                 }).then((pacient) =>{
                     res.status(201).json({ msg: "Pacient edited", pacient})
                 })
