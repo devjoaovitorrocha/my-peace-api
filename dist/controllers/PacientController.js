@@ -87,7 +87,7 @@ exports.default = new class PacientController {
                     return res.status(422).json({ msg: "this email is already in use" });
                 }
                 try {
-                    db_1.collections.pacients.updateOne({ _id: objectIdPacient }, {
+                    db_1.collections.pacients.updateMany({ _id: objectIdPacient }, {
                         name,
                         email
                     }).then((pacient) => {

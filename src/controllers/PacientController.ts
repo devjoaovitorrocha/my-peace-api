@@ -97,7 +97,7 @@ export default new class PacientController{
             }
 
             try{
-                collections.pacients.updateOne({_id: objectIdPacient}, {
+                collections.pacients.updateMany({_id: objectIdPacient}, {
                     name,
                     email
                 }).then((pacient) =>{
