@@ -97,10 +97,10 @@ export default new class PacientController{
             }
 
             try{
-                collections.pacients.updateOne({_id: objectIdPacient}, {
-                    name: name,
-                    email: email
-                }).then((pacient) =>{
+                collections.pacients.updateOne({_id: objectIdPacient}, { $set: {   
+                    "name": name,
+                    "email": email
+                }}).then((pacient) =>{
                     res.status(201).json({ msg: "Pacient edited", pacient})
                 })
 
