@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../db");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const mongodb_1 = require("mongodb");
+const mail_1 = __importDefault(require("../services/mail"));
 exports.default = new class PacientController {
     register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -41,6 +42,9 @@ exports.default = new class PacientController {
                 const password = Math.random().toString(36).slice(-10);
                 const salt = yield bcrypt_1.default.genSalt(12);
                 const passwordHash = yield bcrypt_1.default.hash(password, salt);
+                mail_1.default.to = email;
+                mail_1.default.message = `Olá, sua conta foi criada na nossa plataforma e a sua senha é "${password}"`;
+                mail_1.default.subject = `MyPeace Cadastro`;
                 try {
                     db_1.collections.pacients.insertOne({
                         name,
@@ -48,7 +52,8 @@ exports.default = new class PacientController {
                         password: passwordHash,
                         idPsychologist
                     }).then(() => {
-                        res.status(201).json({ msg: "Pacient registered", password: password });
+                        mail_1.default.sendMail();
+                        res.status(201).json({ msg: "Pacient registered, senha enviada para o paciente", password: password });
                     });
                 }
                 catch (err) {
@@ -65,15 +70,10 @@ exports.default = new class PacientController {
     edit(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { name, email, idPsychologist } = req.body;
-                const objectId = new mongodb_1.ObjectId(idPsychologist);
+                const { name, email } = req.body;
                 //Validations
-                if (!name || !email || !idPsychologist) {
+                if (!name || !email) {
                     return res.status(422).json({ msg: "something is null..." });
-                }
-                const psychologistExists = yield db_1.collections.psychologists.find({ _id: objectId }).toArray();
-                if (!psychologistExists[0]) {
-                    return res.status(422).json({ msg: "this psychologist does not exist" });
                 }
                 const idPacient = req.params.idUser;
                 const objectIdPacient = new mongodb_1.ObjectId(idPacient);
@@ -89,9 +89,50 @@ exports.default = new class PacientController {
                 try {
                     db_1.collections.pacients.updateOne({ _id: objectIdPacient }, { $set: {
                             "name": name,
-                            "email": email
+                            "email": email,
+                        } }).then(() => {
+                        res.status(201).json({ msg: "Pacient updated" });
+                    });
+                }
+                catch (err) {
+                    console.log(err);
+                    res.status(500).json({ msg: "Server error, contact the support" });
+                }
+            }
+            catch (err) {
+                res.status(500).json({ msg: 'Sorry, there is something wrong...' });
+                console.log(err);
+            }
+        });
+    }
+    editPassword(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { currentPassword, newPassword, confirmPassword } = req.body;
+                //Validations
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                    return res.status(422).json({ msg: "something is null..." });
+                }
+                const idPacient = req.params.idUser;
+                const objectIdPacient = new mongodb_1.ObjectId(idPacient);
+                const pacientExists = yield db_1.collections.pacients.findOne({ _id: objectIdPacient });
+                if (!pacientExists) {
+                    return res.status(422).json({ msg: "this pacient does not exist" });
+                }
+                const decryptedPassword = yield bcrypt_1.default.compare(currentPassword, pacientExists.password);
+                if (!decryptedPassword) {
+                    return res.status(422).json({ msg: "the current password is incorrect" });
+                }
+                if (newPassword != confirmPassword) {
+                    return res.status(422).json({ msg: "the passwords dont match" });
+                }
+                const salt = yield bcrypt_1.default.genSalt(12);
+                const passwordHash = yield bcrypt_1.default.hash(newPassword, salt);
+                try {
+                    db_1.collections.pacients.updateOne({ _id: objectIdPacient }, { $set: {
+                            "password": passwordHash
                         } }).then((pacient) => {
-                        res.status(201).json({ msg: "Pacient edited", pacient });
+                        res.status(201).json({ msg: "Password updated" });
                     });
                 }
                 catch (err) {

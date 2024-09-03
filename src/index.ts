@@ -25,15 +25,19 @@ connectToDatabase().then(() => {
     //==========================PSYCHOLOGIST============================
 
     app.post('/register/psychologist', PsychologistConttroller.register)
+    app.post('/update/psychologists/:idUser', AuthController.checkToken, PsychologistConttroller.edit)
+    app.post('/update/password/psychologist/:idUser', AuthController.checkToken, PsychologistConttroller.editPassword)
+    app.post('/delete/psychologists/:idUser', AuthController.checkToken, PsychologistConttroller.delete)
     app.get('/get/psychologistInfo/:idUser', AuthController.checkToken , PsychologistConttroller.getInfo)
 
     //============================PACIENT===============================
 
-    app.post('/register/pacient/:idUser', AuthController.checkToken ,PacientController.register)
+    app.post('/register/pacient/:idUser', AuthController.checkToken, PacientController.register)
     app.get('/get/pacientInfo/:idUser', AuthController.checkToken , PacientController.getInfo)
     app.get('/getAll/pacients/:idUser', AuthController.checkToken, PacientController.allPacients)
-    app.post('/delete/pacients/:idUser',  PacientController.delete)
-    app.post('/update/pacients/:idUser',  PacientController.edit)
+    app.post('/delete/pacients/:idUser', AuthController.checkToken, PacientController.delete)
+    app.post('/update/pacients/:idUser', AuthController.checkToken, PacientController.edit)
+    app.post('/update/password/pacients/:idUser', AuthController.checkToken, PacientController.editPassword)
 
     //============================REPORT================================
 

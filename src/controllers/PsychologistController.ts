@@ -58,6 +58,119 @@ export default new class PsychologistConttroller{
         }
     }
 
+    async edit(req: Request, res: Response){
+        try{
+            const {name, cpf, registerNumber, email} = req.body
+
+            //Validations
+
+            if(!name || !cpf || !registerNumber ){
+                return res.status(422).json({ msg: "something is null..."})
+            }
+            
+            const idPsychologist = req.params.idUser
+            const objectIdPsychologist = new ObjectId(idPsychologist)
+            
+            const psychologistExists = await collections.psychologists.findOne({_id: objectIdPsychologist})
+
+            if(!psychologistExists){
+                return res.status(422).json({ msg: "this psychologist does not exist" })
+            }
+
+            const emailExistPacient = await collections.pacients.find({ email: email }).toArray()
+            const emailExistsPsychologist = await collections.psychologists.find({ email: email, _id: { $ne: objectIdPsychologist } }).toArray()
+
+            if(emailExistPacient[0] || emailExistsPsychologist[0]){
+                return res.status(422).json({ msg: "this email is already in use" })
+            }
+
+            try{
+                collections.psychologists.updateOne({_id: objectIdPsychologist}, { $set: {   
+                    "name": name,
+                    "cpf": cpf,
+                    "registerNumber": registerNumber,
+                    "email": email,
+                }}).then(() =>{
+                    res.status(201).json({ msg: "Psychologist updated"})
+                })
+
+            } catch(err){
+
+                console.log(err)
+
+                res.status(500).json({ msg: "Server error, contact the support"})
+            }  
+        }catch(err){
+            res.status(500).json({msg: 'Sorry, there is something wrong...'})
+            console.log(err)
+        }
+    }
+    
+    async editPassword(req: Request, res: Response){
+        try{
+            const {currentPassword, newPassword, confirmPassword} = req.body
+
+            //Validations
+
+            if(!currentPassword || !newPassword || !confirmPassword ){
+                return res.status(422).json({ msg: "something is null..."})
+            }
+            
+            const idPsychologist = req.params.idUser
+            const objectIdPsychologist = new ObjectId(idPsychologist)
+            
+            const psychologistExists = await collections.psychologists.findOne({_id: objectIdPsychologist})
+
+            if(!psychologistExists){
+                return res.status(422).json({ msg: "this pacient does not exist" })
+            }
+
+
+            const decryptedPassword: boolean = await bcrypt.compare(currentPassword, psychologistExists.password)
+            if(!decryptedPassword){
+                return res.status(422).json({msg: "the current password is incorrect"})
+            }
+
+            if(newPassword != confirmPassword){
+                return res.status(422).json({msg: "the passwords dont match"})
+            }
+
+            const salt = await bcrypt.genSalt(12)
+            const passwordHash = await bcrypt.hash(newPassword, salt)
+
+            try{
+                collections.psychologists.updateOne({_id: objectIdPsychologist}, { $set: {   
+                    "password": passwordHash
+                }}).then(() =>{
+                    res.status(201).json({ msg: "Password updated"})
+                })
+
+            } catch(err){
+
+                console.log(err)
+
+                res.status(500).json({ msg: "Server error, contact the support"})
+            }  
+        }catch(err){
+            res.status(500).json({msg: 'Sorry, there is something wrong...'})
+            console.log(err)
+        }
+    }
+
+    async delete(req:Request, res:Response){
+        try{
+            const idPsychologist = req.params.idUser
+            const objectId = new ObjectId(idPsychologist)
+
+            collections.psychologists.deleteOne({_id: objectId}).then(() => {
+                return res.status(200).json({ msg: "Psychologist deleted"})
+            })
+        }catch(err){
+            res.status(500).json({msg: 'Sorry, there is something wrong...'})
+            console.log(err)
+        }
+    }
+
     async getInfo(req:Request, res:Response){
         try{
             const idPschologist = req.params.idUser
