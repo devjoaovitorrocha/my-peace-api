@@ -21,7 +21,7 @@ class Mail {
         const transporter = nodemailer.createTransport({
             host: config.host,
             port: config.port,
-            secure: false,
+            secure: true,
             auth: {
                 user: config.user,
                 pass: config.password
@@ -29,8 +29,6 @@ class Mail {
             tls: { rejectUnauthorized: false }
         });
 
-
-        console.log(mailOptions);
 
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {

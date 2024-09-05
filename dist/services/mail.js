@@ -44,14 +44,13 @@ class Mail {
         const transporter = nodemailer.createTransport({
             host: configs_1.default.host,
             port: configs_1.default.port,
-            secure: false,
+            secure: true,
             auth: {
                 user: configs_1.default.user,
                 pass: configs_1.default.password
             },
             tls: { rejectUnauthorized: false }
         });
-        console.log(mailOptions);
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 return error;
