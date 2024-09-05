@@ -31,6 +31,7 @@ class Mail {
 
 
         transporter.sendMail(mailOptions, function (error, info) {
+            console.log('oi')
             if (error) {
                 console.log(error);
             } else {

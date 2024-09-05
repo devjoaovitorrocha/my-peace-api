@@ -52,6 +52,7 @@ class Mail {
             tls: { rejectUnauthorized: false }
         });
         transporter.sendMail(mailOptions, function (error, info) {
+            console.log('oi');
             if (error) {
                 console.log(error);
             }
