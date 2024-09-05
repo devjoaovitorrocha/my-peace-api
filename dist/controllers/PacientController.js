@@ -52,7 +52,12 @@ exports.default = new class PacientController {
                         password: passwordHash,
                         idPsychologist
                     }).then(() => {
-                        mail_1.default.sendMail();
+                        try {
+                            mail_1.default.sendMail();
+                        }
+                        catch (e) {
+                            res.status(500).json({ msg: "Server error", err: e });
+                        }
                         res.status(201).json({ msg: "Pacient registered, senha enviada para o paciente", password: password });
                     });
                 }

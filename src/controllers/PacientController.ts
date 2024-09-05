@@ -51,7 +51,11 @@ export default new class PacientController{
                     password: passwordHash,
                     idPsychologist
                 }).then(() =>{
-                    Mail.sendMail()
+                    try{
+                        Mail.sendMail()
+                    }catch(e){
+                        res.status(500).json({ msg: "Server error", err: e})
+                    }
                     res.status(201).json({ msg: "Pacient registered, senha enviada para o paciente", password: password})
                 })
 
