@@ -32,9 +32,9 @@ class Mail {
 
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
-                return error;
+                console.log(error);
             } else {
-                return "E-mail enviado com sucesso!";
+                console.log("E-mail enviado com sucesso!");
             }
         });
     }
