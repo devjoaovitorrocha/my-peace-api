@@ -8,7 +8,7 @@ dotenv_1.default.config();
 class Configs {
     constructor() {
         this.host = process.env.EMAIL_HOST;
-        this.port = 587;
+        this.port = parseInt(process.env.EMAIL_PORT);
         this.user = process.env.EMAIL_USER;
         this.password = process.env.EMAIL_PASSWORD;
     }
