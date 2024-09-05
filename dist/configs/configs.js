@@ -7,8 +7,8 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 class Configs {
     constructor() {
-        this.host = process.env.EMAIL_HOST;
-        this.port = parseInt(process.env.EMAIL_PORT);
+        this.host = 'smtp-mail.outlook.com';
+        this.port = 587;
         this.user = process.env.EMAIL_USER;
         this.password = process.env.EMAIL_PASSWORD;
     }
