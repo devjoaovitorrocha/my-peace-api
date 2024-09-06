@@ -55,16 +55,15 @@ class Mail {
         });
         transporter.verify(function (error) {
             if (error) {
-                console.log(error);
+                return error;
             }
             else {
-                console.log("Server is ready to take our messages");
                 transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
-                        console.log(error);
+                        return error;
                     }
                     else {
-                        console.log("E-mail enviado com sucesso!");
+                        return "E-mail enviado com sucesso!";
                     }
                 });
             }
