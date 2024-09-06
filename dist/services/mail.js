@@ -63,15 +63,6 @@ class Mail {
                     rejectUnauthorized: false
                 }
             });
-            transporter.sendMail(mailOptions, function (error, info) {
-                console.log('oi');
-                if (error) {
-                    console.log(error);
-                }
-                else {
-                    console.log("E-mail enviado com sucesso!");
-                }
-            });
             try {
                 yield transporter.verify();
                 yield transporter.sendMail(mailOptions);
