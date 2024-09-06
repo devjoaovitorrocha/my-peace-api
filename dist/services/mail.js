@@ -22,6 +22,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -35,48 +44,35 @@ class Mail {
         this.message = message;
     }
     sendMail() {
-        let mailOptions = {
-            from: "projetomypeace@gmail.com",
-            to: this.to,
-            subject: this.subject,
-            html: this.message
-        };
-        const transporter = nodemailer.createTransport({
-            host: configs_1.default.host,
-            port: configs_1.default.port,
-            secure: false,
-            auth: {
-                user: configs_1.default.user,
-                pass: configs_1.default.password
-            },
-            tls: {
-                rejectUnauthorized: false
+        return __awaiter(this, void 0, void 0, function* () {
+            let mailOptions = {
+                from: "projetomypeace@gmail.com",
+                to: this.to,
+                subject: this.subject,
+                html: this.message
+            };
+            const transporter = nodemailer.createTransport({
+                host: configs_1.default.host,
+                port: configs_1.default.port,
+                secure: false,
+                auth: {
+                    user: configs_1.default.user,
+                    pass: configs_1.default.password
+                },
+                tls: {
+                    rejectUnauthorized: false
+                }
+            });
+            try {
+                yield transporter.verify();
+                yield transporter.sendMail(mailOptions);
+                return "E-mail enviado com sucesso!";
+            }
+            catch (error) {
+                return error;
             }
         });
-        try {
-            let erro = 'oi';
-            transporter.verify((error, sucess) => {
-                if (error) {
-                    erro = error;
-                }
-                else {
-                    erro = "Server is ready to take our messages";
-                }
-            });
-            transporter.sendMail(mailOptions, function (error, info) {
-                if (error) {
-                    erro = error;
-                }
-                else {
-                    erro = "E-mail enviado com sucesso!";
-                }
-            });
-            return erro;
-        }
-        catch (e) {
-            return e;
-        }
     }
 }
-exports.default = new Mail;
+exports.default = new Mail();
 //# sourceMappingURL=mail.js.map

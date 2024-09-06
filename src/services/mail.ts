@@ -2,15 +2,12 @@ import * as nodemailer from "nodemailer";
 import config from '../configs/configs';
 
 class Mail {
-
     constructor(
         public to?: string,
         public subject?: string,
         public message?: string) { }
 
-
-    sendMail() {
-
+    async sendMail() {
         let mailOptions = {
             from: "projetomypeace@gmail.com",
             to: this.to,
@@ -18,8 +15,6 @@ class Mail {
             html: this.message
         };
 
-        
-        
         const transporter = nodemailer.createTransport({
             host: config.host,
             port: config.port,
@@ -28,40 +23,21 @@ class Mail {
                 user: config.user,
                 pass: config.password
             },
-            tls: { 
-                rejectUnauthorized: false 
+            tls: {
+                rejectUnauthorized: false
             }
         });
 
-        try{
-            let erro: any = 'oi'
+        try {
+            await transporter.verify();
 
-            transporter.verify( (error, sucess) => {
-                if (error) {
-                    erro = error;
-                } else {
-                    erro = "Server is ready to take our messages";
-                }
-            });
-
-            transporter.sendMail(mailOptions, function (error, info) {
-                if (error) {
-                    erro = error;
-                } else {
-                    erro = "E-mail enviado com sucesso!";
-                }
-            });
-
-            return erro
-
-        }catch(e){
-            return e
+            await transporter.sendMail(mailOptions);
+            
+            return "E-mail enviado com sucesso!";
+        } catch (error) {
+            return error;
         }
-
-
-
-        
     }
 }
 
-export default new Mail;
+export default new Mail();
