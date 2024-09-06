@@ -34,22 +34,25 @@ class Mail {
         });
 
         try{
+            let erro: any = 'oi'
 
-            transporter.verify( (error) => {
+            transporter.verify( (error, sucess) => {
                 if (error) {
-                return error;
+                    erro = error;
                 } else {
-                console.log("Server is ready to take our messages");
+                    erro = "Server is ready to take our messages";
                 }
             });
 
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
-                    return error;
+                    erro = error;
                 } else {
-                    return "E-mail enviado com sucesso!";
+                    erro = "E-mail enviado com sucesso!";
                 }
             });
+
+            return erro
 
         }catch(e){
             return e
