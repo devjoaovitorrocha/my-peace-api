@@ -35,21 +35,17 @@ class Mail {
 
         transporter.verify(function (error) {
             if (error) {
-              return error;
+              return 'error';
             } else {
-
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
-                    return error;
+                    return 'error';
                 } else {
                     return "E-mail enviado com sucesso!";
                 }
             });
             }
         });
-
-
-        
     }
 }
 
