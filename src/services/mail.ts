@@ -17,26 +17,40 @@ class Mail {
             subject: this.subject,
             html: this.message
         };
+
+        
         
         const transporter = nodemailer.createTransport({
             host: config.host,
             port: config.port,
-            secure: true,
+            secure: false,
             auth: {
                 user: config.user,
                 pass: config.password
             },
-            tls: { rejectUnauthorized: false }
-        });
-
-
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log("E-mail enviado com sucesso!");
+            tls: { 
+                rejectUnauthorized: false 
             }
         });
+
+        transporter.verify(function (error) {
+            if (error) {
+              console.log(error);
+            } else {
+            console.log("Server is ready to take our messages");
+
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log("E-mail enviado com sucesso!");
+                }
+            });
+            }
+        });
+
+
+        
     }
 }
 
