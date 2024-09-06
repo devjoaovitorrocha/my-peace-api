@@ -33,6 +33,8 @@ class Mail {
             }
         });
 
+        return 'oi'
+
         transporter.verify(function (error) {
             if (error) {
               return 'error';

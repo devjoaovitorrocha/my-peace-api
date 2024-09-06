@@ -53,6 +53,7 @@ class Mail {
                 rejectUnauthorized: false
             }
         });
+        return 'oi';
         transporter.verify(function (error) {
             if (error) {
                 return 'error';
