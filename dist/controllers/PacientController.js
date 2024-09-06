@@ -53,6 +53,7 @@ exports.default = new class PacientController {
                         idPsychologist
                     }).then(() => {
                         const mail = mail_1.default.sendMail();
+                        console.log(mail);
                         res.status(201).json({ msg: "Pacient registered, senha enviada para o paciente", password: password });
                     });
                 }
