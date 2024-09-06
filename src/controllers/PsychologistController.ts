@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { collections } from "../db";
 import bcrypt from 'bcrypt'
 import { ObjectId } from "mongodb";
+import Mail from "../services/mail";
 
 export default new class PsychologistConttroller{
 
@@ -35,13 +36,22 @@ export default new class PsychologistConttroller{
             const salt = await bcrypt.genSalt(12)
             const passwordHash = await bcrypt.hash(password, salt)
 
+            const verifyCode = Math.floor(Math.random() * 10000).toString();
+            const verifyCodeHash = await bcrypt.hash(verifyCode, salt)
+
+            Mail.to = email
+            Mail.message = `Olá, sua conta foi criada na nossa plataforma e o seu código de verificação é "${verifyCode}"`
+            Mail.subject = `MyPeace Cadastro`
+
             try{
                 collections.psychologists.insertOne({
                     name, 
                     cpf, 
                     registerNumber,
                     email, 
-                    password: passwordHash
+                    password: passwordHash,
+                    verifyCode: verifyCodeHash,
+                    verified: false
                 }).then(() =>{
                     res.status(201).json({ msg: "Psychologist registered"})
                 })

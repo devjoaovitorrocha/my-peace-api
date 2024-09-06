@@ -46,9 +46,10 @@ connectToDatabase().then(() => {
     app.post('/delete/report/:idUser/:idReport', AuthController.checkToken , ReportController.delete)
     app.get('/getAll/reports/:idUser', AuthController.checkToken, ReportController.allReports)
 
-    //=============================LOGIN================================
+    //=============================AUTH================================
 
     app.post('/auth/login', AuthController.login)
+    app.post('/auth/verifyEmail/:idUser', AuthController.checkToken, AuthController.verifyCode)
 
     //==============================SERVER=============================
 

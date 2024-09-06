@@ -124,5 +124,51 @@ exports.default = new class AuthController {
             }
         });
     }
+    verifyCode(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { verifyCode } = req.body;
+                const id = req.params.idUser;
+                const objectId = new mongodb_1.ObjectId(id);
+                let user;
+                const psychologistInfo = yield db_1.collections.psychologists.find({ _id: objectId }).toArray();
+                const pacientInfo = yield db_1.collections.pacients.find({ _id: objectId }).toArray();
+                if (!psychologistInfo[0]) {
+                    if (!pacientInfo[0]) {
+                        return res.status(422).json({ msg: "user not found" });
+                    }
+                    else {
+                        user = pacientInfo[0];
+                    }
+                }
+                else {
+                    user = psychologistInfo[0];
+                }
+                try {
+                    if (!verifyCode) {
+                        return res.status(401).json({ msg: 'no code provided.' });
+                    }
+                    const match = yield bcrypt_1.default.compare(verifyCode, user.verifyCode);
+                    if (match) {
+                        db_1.collections.psychologists.updateOne({ _id: mongodb_1.ObjectId }, { $set: { verify: true } }, { upsert: false }).then(() => {
+                            return res.status(200).json({ msg: "email veirfied" });
+                        });
+                    }
+                    else {
+                        return res.status(422).json({ msg: "invalid code" });
+                    }
+                }
+                catch (e) {
+                    console.log(e);
+                    res.status(401).json({ msg: "Server error" });
+                }
+            }
+            catch (e) {
+                res.status(401).json({
+                    msg: "something is wrong..."
+                });
+            }
+        });
+    }
 };
 //# sourceMappingURL=AuthController.js.map
