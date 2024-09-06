@@ -130,4 +130,59 @@ export default new class AuthController{
         }
             
     }
+
+    async verifyCode(req: Request, res: Response){
+        try{
+            const { verifyCode } = req.body
+
+            const id = req.params.idUser
+            const objectId = new ObjectId(id)
+            let user
+
+            const psychologistInfo = await collections.psychologists.find({ _id: objectId }).toArray()
+            const pacientInfo = await collections.pacients.find({ _id: objectId }).toArray()
+
+            if(!psychologistInfo[0]){
+                if(!pacientInfo[0]){
+                    return res.status(422).json({ msg: "user not found" })
+                }else{
+                    user = pacientInfo[0]
+                }
+            }else{
+                user = psychologistInfo[0]
+            }
+
+            try{
+
+                if (!verifyCode){
+                    return res.status(401).json({ msg: 'no code provided.' });
+                } 
+
+                const match = await bcrypt.compare(verifyCode, user.verifyCode);
+
+                if(match) {
+                    collections.psychologists.updateOne(
+                        {_id: ObjectId}, 
+                        {$set: { verify: true }},
+                        {upsert: false}
+                    ).then(() => {
+                        return res.status(200).json({ msg: "email veirfied" })
+                    })
+                }else{
+                    return res.status(422).json({ msg: "invalid code" })
+                }
+
+            }catch(e){
+                console.log(e)
+                res.status(401).json({ msg: "Server error" })
+            }
+        }catch(e){
+
+            res.status(401).json({
+                msg: "something is wrong..."
+            })
+
+        }
+            
+    }
 }

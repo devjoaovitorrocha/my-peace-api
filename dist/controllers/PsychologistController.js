@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../db");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const mongodb_1 = require("mongodb");
+const mail_1 = __importDefault(require("../services/mail"));
 exports.default = new class PsychologistConttroller {
     register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -38,13 +39,20 @@ exports.default = new class PsychologistConttroller {
                 }
                 const salt = yield bcrypt_1.default.genSalt(12);
                 const passwordHash = yield bcrypt_1.default.hash(password, salt);
+                const verifyCode = Math.floor(Math.random() * 10000).toString();
+                const verifyCodeHash = yield bcrypt_1.default.hash(verifyCode, salt);
+                mail_1.default.to = email;
+                mail_1.default.message = `Olá, sua conta foi criada na nossa plataforma e o seu código de verificação é "${verifyCode}"`;
+                mail_1.default.subject = `MyPeace Cadastro`;
                 try {
                     db_1.collections.psychologists.insertOne({
                         name,
                         cpf,
                         registerNumber,
                         email,
-                        password: passwordHash
+                        password: passwordHash,
+                        verifyCode: verifyCodeHash,
+                        verified: false
                     }).then(() => {
                         res.status(201).json({ msg: "Psychologist registered" });
                     });
