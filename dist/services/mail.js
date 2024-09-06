@@ -53,22 +53,27 @@ class Mail {
                 rejectUnauthorized: false
             }
         });
-        return 'oi';
-        transporter.verify(function (error) {
-            if (error) {
-                return 'error';
-            }
-            else {
-                transporter.sendMail(mailOptions, function (error, info) {
-                    if (error) {
-                        return 'error';
-                    }
-                    else {
-                        return "E-mail enviado com sucesso!";
-                    }
-                });
-            }
-        });
+        try {
+            transporter.verify((error) => {
+                if (error) {
+                    return error;
+                }
+                else {
+                    console.log("Server is ready to take our messages");
+                }
+            });
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    return error;
+                }
+                else {
+                    return "E-mail enviado com sucesso!";
+                }
+            });
+        }
+        catch (e) {
+            return e;
+        }
     }
 }
 exports.default = new Mail;

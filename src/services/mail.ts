@@ -33,21 +33,31 @@ class Mail {
             }
         });
 
-        return 'oi'
+        try{
 
-        transporter.verify(function (error) {
-            if (error) {
-              return 'error';
-            } else {
+            transporter.verify( (error) => {
+                if (error) {
+                return error;
+                } else {
+                console.log("Server is ready to take our messages");
+                }
+            });
+
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
-                    return 'error';
+                    return error;
                 } else {
                     return "E-mail enviado com sucesso!";
                 }
             });
-            }
-        });
+
+        }catch(e){
+            return e
+        }
+
+
+
+        
     }
 }
 
