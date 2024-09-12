@@ -94,8 +94,10 @@ exports.default = new class AuthController {
                     user = psychologistInfo[0];
                 }
                 try {
-                    const token = (_a = req.header('Authorization')) === null || _a === void 0 ? void 0 : _a.replace('Bearer ', '');
+                    const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.replace('Bearer ', '');
+                    const authorization = req.headers;
                     if (!token) {
+                        console.log(authorization);
                         return res.status(401).json({ msg: 'No token provided.' });
                     }
                     let decoded;
@@ -105,12 +107,7 @@ exports.default = new class AuthController {
                     else {
                         decoded = jsonwebtoken_1.default.verify(token, auth.secret);
                     }
-                    if (user._id == decoded._id) {
-                        next();
-                    }
-                    else {
-                        return res.status(401).json({ msg: 'user unauthorized' });
-                    }
+                    next();
                 }
                 catch (e) {
                     console.log(e);
@@ -118,7 +115,8 @@ exports.default = new class AuthController {
                 }
             }
             catch (e) {
-                res.status(401).json({
+                console.log(e);
+                res.status(500).json({
                     msg: "something is wrong..."
                 });
             }

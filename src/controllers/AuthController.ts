@@ -96,9 +96,11 @@ export default new class AuthController{
             }
 
             try{
-                const token = req.header('Authorization')?.replace('Bearer ', '');
+                const token = req.headers.authorization?.replace('Bearer ', '');
+                const authorization = req.headers
 
                 if (!token){
+                    console.log(authorization)
                     return res.status(401).json({ msg: 'No token provided.' });
                 } 
 
@@ -110,20 +112,15 @@ export default new class AuthController{
                     decoded = jwt.verify(token, auth.secret)
                 }
 
-                
-                if(user._id == decoded._id){
-                    next()
-                }else{
-                    return res.status(401).json({msg: 'user unauthorized'});
-                }
+                next()
 
             }catch(e){
                 console.log(e)
                 res.status(401).json({ msg: "invalid token" })
             }
         }catch(e){
-
-            res.status(401).json({
+            console.log(e)
+            res.status(500).json({
                 msg: "something is wrong..."
             })
 
