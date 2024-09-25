@@ -1,8 +1,16 @@
 import { Request, Response } from "express";
-import { collections } from "../db";
+import { collections, connectToDatabase } from "../db";
 import bcrypt from 'bcrypt'
-import { ObjectId } from "mongodb";
+import { GridFSBucket, ObjectId } from "mongodb";
 import Mail from "../services/mail";
+
+
+let gfs: GridFSBucket;
+
+connectToDatabase().then((connection) => {
+    gfs = new GridFSBucket(connection, { bucketName: 'photos' });
+});
+
 
 export default new class PsychologistConttroller{
 
@@ -45,7 +53,8 @@ export default new class PsychologistConttroller{
 
             try{
                 collections.psychologists.insertOne({
-                    name, 
+                    name,
+                    photo: '', 
                     cpf, 
                     registerNumber,
                     email, 
@@ -172,9 +181,24 @@ export default new class PsychologistConttroller{
             const idPsychologist = req.params.idUser
             const objectId = new ObjectId(idPsychologist)
 
+            const psychologist = await collections.psychologists.find({_id: objectId}).toArray()
+            const files = await gfs.find({ filename: psychologist[0].photo }).toArray()
+            await gfs.delete(files[0]._id)
+
             collections.psychologists.deleteOne({_id: objectId}).then(() => {
                 return res.status(200).json({ msg: "Psychologist deleted"})
             })
+
+            const pacients = await collections.pacients.find({idPsychologist: idPsychologist}).toArray()
+
+            pacients.map(async (pacient) => {
+                const files = await gfs.find({ filename: pacient.photo }).toArray()
+                await gfs.delete(files[0]._id)
+            })
+
+            collections.pacients.deleteMany({idPsychologist: idPsychologist})
+            
+            collections.reports.deleteMany({idPsychologist: idPsychologist})
         }catch(err){
             res.status(500).json({msg: 'Sorry, there is something wrong...'})
             console.log(err)

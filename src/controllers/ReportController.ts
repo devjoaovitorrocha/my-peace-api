@@ -30,7 +30,8 @@ export default new class ReportController{
                 time,
                 feeling,
                 description,
-                idPacient
+                idPacient,
+                idPsychologist: pacientExists[0].idPsychologist
             }).then(() => {
                 return res.status(200).json({
                     msg: 'report registered'

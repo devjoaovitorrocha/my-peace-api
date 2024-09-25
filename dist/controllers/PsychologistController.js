@@ -16,6 +16,10 @@ const db_1 = require("../db");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const mongodb_1 = require("mongodb");
 const mail_1 = __importDefault(require("../services/mail"));
+let gfs;
+(0, db_1.connectToDatabase)().then((connection) => {
+    gfs = new mongodb_1.GridFSBucket(connection, { bucketName: 'photos' });
+});
 exports.default = new class PsychologistConttroller {
     register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -47,6 +51,7 @@ exports.default = new class PsychologistConttroller {
                 try {
                     db_1.collections.psychologists.insertOne({
                         name,
+                        photo: '',
                         cpf,
                         registerNumber,
                         email,
@@ -154,9 +159,19 @@ exports.default = new class PsychologistConttroller {
             try {
                 const idPsychologist = req.params.idUser;
                 const objectId = new mongodb_1.ObjectId(idPsychologist);
+                const psychologist = yield db_1.collections.psychologists.find({ _id: objectId }).toArray();
+                const files = yield gfs.find({ filename: psychologist[0].photo }).toArray();
+                yield gfs.delete(files[0]._id);
                 db_1.collections.psychologists.deleteOne({ _id: objectId }).then(() => {
                     return res.status(200).json({ msg: "Psychologist deleted" });
                 });
+                const pacients = yield db_1.collections.pacients.find({ idPsychologist: idPsychologist }).toArray();
+                pacients.map((pacient) => __awaiter(this, void 0, void 0, function* () {
+                    const files = yield gfs.find({ filename: pacient.photo }).toArray();
+                    yield gfs.delete(files[0]._id);
+                }));
+                db_1.collections.pacients.deleteMany({ idPsychologist: idPsychologist });
+                db_1.collections.reports.deleteMany({ idPsychologist: idPsychologist });
             }
             catch (err) {
                 res.status(500).json({ msg: 'Sorry, there is something wrong...' });

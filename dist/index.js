@@ -34,6 +34,9 @@ const PacientController_1 = __importDefault(require("./controllers/PacientContro
 const AuthController_1 = __importDefault(require("./controllers/AuthController"));
 const ReportController_1 = __importDefault(require("./controllers/ReportController"));
 const cors_1 = __importDefault(require("cors"));
+const multer_1 = __importDefault(require("multer"));
+const PhotosController_1 = __importDefault(require("./controllers/PhotosController"));
+const ReportPsychologistController_1 = __importDefault(require("./controllers/ReportPsychologistController"));
 dotenv.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
@@ -46,6 +49,12 @@ const options = {
 };
 app.use((0, cors_1.default)(options));
 (0, db_1.connectToDatabase)().then(() => {
+    const storage = multer_1.default.memoryStorage();
+    const upload = (0, multer_1.default)({ storage });
+    //==========================PHOTOS============================
+    app.post('/upload/photo/:idUser', AuthController_1.default.checkToken, upload.single('photo'), PhotosController_1.default.upload);
+    app.get('/get/photo/:idUser/:photoName', AuthController_1.default.checkToken, PhotosController_1.default.get);
+    app.post('/delete/photo/:idUser/:photoName', AuthController_1.default.checkToken, PhotosController_1.default.delete);
     //==========================PSYCHOLOGIST============================
     app.post('/register/psychologist', PsychologistController_1.default.register);
     app.post('/update/psychologists/:idUser', AuthController_1.default.checkToken, PsychologistController_1.default.edit);
@@ -64,6 +73,12 @@ app.use((0, cors_1.default)(options));
     app.post('/update/report/:idUser/:idReport', AuthController_1.default.checkToken, ReportController_1.default.update);
     app.post('/delete/report/:idUser/:idReport', AuthController_1.default.checkToken, ReportController_1.default.delete);
     app.get('/getAll/reports/:idUser', AuthController_1.default.checkToken, ReportController_1.default.allReports);
+    //============================REPORT PSYCHOLOGIST================================
+    app.post('/register/report/psychologist/:idUser/:idPacient', AuthController_1.default.checkToken, ReportPsychologistController_1.default.register);
+    app.post('/update/report/psychologist/:idUser/:idReport', AuthController_1.default.checkToken, ReportPsychologistController_1.default.update);
+    app.post('/delete/report/psychologist/:idUser/:idReport', AuthController_1.default.checkToken, ReportPsychologistController_1.default.delete);
+    app.get('/getAll/reports/psychologist/pacient/:idUser', AuthController_1.default.checkToken, ReportPsychologistController_1.default.allReportsPacient);
+    app.get('/getAll/reports/psychologist/:idUser', AuthController_1.default.checkToken, ReportPsychologistController_1.default.allReportsPsychologist);
     //=============================AUTH================================
     app.post('/auth/login', AuthController_1.default.login);
     app.post('/auth/verifyEmail/:idUser', AuthController_1.default.checkToken, AuthController_1.default.verifyCode);

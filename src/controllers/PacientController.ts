@@ -1,8 +1,14 @@
 import { Request, Response } from "express";
-import { collections } from "../db";
+import { collections, connectToDatabase } from "../db";
 import bcrypt from 'bcrypt'
-import { ObjectId } from "mongodb";
+import { GridFSBucket, ObjectId } from "mongodb";
 import Mail from "../services/mail";
+
+let gfs: GridFSBucket;
+
+connectToDatabase().then((connection) => {
+    gfs = new GridFSBucket(connection, { bucketName: 'photos' });
+});
 
 export default new class PacientController{
 
@@ -47,6 +53,7 @@ export default new class PacientController{
             try{
                 collections.pacients.insertOne({
                     name,
+                    photo: '',
                     email, 
                     password: passwordHash,
                     idPsychologist
@@ -164,10 +171,18 @@ export default new class PacientController{
         }
     }
 
+    
+
     async delete(req:Request, res:Response){
         try{
             const idPacient = req.params.idUser
             const objectId = new ObjectId(idPacient)
+
+            const pacient = await collections.pacients.find({_id: objectId}).toArray()
+            const files = await gfs.find({ filename: pacient[0].photo }).toArray()
+            files && await gfs.delete(files[0]._id)
+            
+            collections.reports.deleteMany({idPacient: objectId})
 
             collections.pacients.deleteOne({_id: objectId}).then(() => {
                 return res.status(200).json({ msg: "Pacient deleted"})

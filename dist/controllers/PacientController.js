@@ -16,6 +16,10 @@ const db_1 = require("../db");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const mongodb_1 = require("mongodb");
 const mail_1 = __importDefault(require("../services/mail"));
+let gfs;
+(0, db_1.connectToDatabase)().then((connection) => {
+    gfs = new mongodb_1.GridFSBucket(connection, { bucketName: 'photos' });
+});
 exports.default = new class PacientController {
     register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -48,6 +52,7 @@ exports.default = new class PacientController {
                 try {
                     db_1.collections.pacients.insertOne({
                         name,
+                        photo: '',
                         email,
                         password: passwordHash,
                         idPsychologist
@@ -151,6 +156,10 @@ exports.default = new class PacientController {
             try {
                 const idPacient = req.params.idUser;
                 const objectId = new mongodb_1.ObjectId(idPacient);
+                const pacient = yield db_1.collections.pacients.find({ _id: objectId }).toArray();
+                const files = yield gfs.find({ filename: pacient[0].photo }).toArray();
+                files && (yield gfs.delete(files[0]._id));
+                db_1.collections.reports.deleteMany({ idPacient: objectId });
                 db_1.collections.pacients.deleteOne({ _id: objectId }).then(() => {
                     return res.status(200).json({ msg: "Pacient deleted" });
                 });

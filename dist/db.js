@@ -36,22 +36,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectToDatabase = exports.collections = void 0;
 const mongoDB = __importStar(require("mongodb"));
 const dotenv = __importStar(require("dotenv"));
+dotenv.config();
+const client = new mongoDB.MongoClient(process.env.DB_CONN_STRING);
 // Global Variables
 exports.collections = {};
 // Initialize Connection
 function connectToDatabase() {
     return __awaiter(this, void 0, void 0, function* () {
-        dotenv.config();
-        const client = new mongoDB.MongoClient(process.env.DB_CONN_STRING);
-        yield client.connect();
+        const connection = yield client.connect();
         const db = client.db(process.env.DB_NAME);
         const psychologistsCollection = db.collection("psychologists");
         const pacientsCollection = db.collection("pacients");
         const reportsCollection = db.collection("reports");
+        const reportsPsychologistCollection = db.collection("reportsPsychologist");
+        const photosFilesCollection = db.collection("photos.files");
+        const photosChunksCollection = db.collection("photos.chunks");
         exports.collections.psychologists = psychologistsCollection;
         exports.collections.pacients = pacientsCollection;
         exports.collections.reports = reportsCollection;
+        exports.collections.reportsPsychologist = reportsPsychologistCollection;
+        exports.collections.photosFiles = photosFilesCollection;
+        exports.collections.photosChunks = photosChunksCollection;
         console.log(`Successfully connected to database and collections...`);
+        return db;
     });
 }
 exports.connectToDatabase = connectToDatabase;
