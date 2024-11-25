@@ -158,7 +158,7 @@ exports.default = new class PacientController {
                 const objectId = new mongodb_1.ObjectId(idPacient);
                 const pacient = yield db_1.collections.pacients.find({ _id: objectId }).toArray();
                 const files = yield gfs.find({ filename: pacient[0].photo }).toArray();
-                files && (yield gfs.delete(files[0]._id));
+                files[0] && (yield gfs.delete(files[0]._id));
                 db_1.collections.reports.deleteMany({ idPacient: objectId });
                 db_1.collections.pacients.deleteOne({ _id: objectId }).then(() => {
                     return res.status(200).json({ msg: "Pacient deleted" });

@@ -180,7 +180,7 @@ export default new class PacientController{
 
             const pacient = await collections.pacients.find({_id: objectId}).toArray()
             const files = await gfs.find({ filename: pacient[0].photo }).toArray()
-            files && await gfs.delete(files[0]._id)
+            files[0] && await gfs.delete(files[0]._id)
             
             collections.reports.deleteMany({idPacient: objectId})
 

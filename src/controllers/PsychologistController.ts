@@ -183,7 +183,7 @@ export default new class PsychologistConttroller{
 
             const psychologist = await collections.psychologists.find({_id: objectId}).toArray()
             const files = await gfs.find({ filename: psychologist[0].photo }).toArray()
-            await gfs.delete(files[0]._id)
+            files[0] && await gfs.delete(files[0]._id)
 
             collections.psychologists.deleteOne({_id: objectId}).then(() => {
                 return res.status(200).json({ msg: "Psychologist deleted"})
@@ -193,7 +193,7 @@ export default new class PsychologistConttroller{
 
             pacients.map(async (pacient) => {
                 const files = await gfs.find({ filename: pacient.photo }).toArray()
-                await gfs.delete(files[0]._id)
+                files[0] && await gfs.delete(files[0]._id)
             })
 
             collections.pacients.deleteMany({idPsychologist: idPsychologist})

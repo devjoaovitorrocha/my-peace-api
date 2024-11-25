@@ -161,14 +161,14 @@ exports.default = new class PsychologistConttroller {
                 const objectId = new mongodb_1.ObjectId(idPsychologist);
                 const psychologist = yield db_1.collections.psychologists.find({ _id: objectId }).toArray();
                 const files = yield gfs.find({ filename: psychologist[0].photo }).toArray();
-                yield gfs.delete(files[0]._id);
+                files[0] && (yield gfs.delete(files[0]._id));
                 db_1.collections.psychologists.deleteOne({ _id: objectId }).then(() => {
                     return res.status(200).json({ msg: "Psychologist deleted" });
                 });
                 const pacients = yield db_1.collections.pacients.find({ idPsychologist: idPsychologist }).toArray();
                 pacients.map((pacient) => __awaiter(this, void 0, void 0, function* () {
                     const files = yield gfs.find({ filename: pacient.photo }).toArray();
-                    yield gfs.delete(files[0]._id);
+                    files[0] && (yield gfs.delete(files[0]._id));
                 }));
                 db_1.collections.pacients.deleteMany({ idPsychologist: idPsychologist });
                 db_1.collections.reports.deleteMany({ idPsychologist: idPsychologist });
